@@ -3,7 +3,7 @@ const blogMOdel = require("../Models/blogModel")
 exports.createBlog = async (req,res,next) => {
     try {
         const blogDetails = {...req.body,
-             author: `${req.user.firstname} ${req.user.lastname}`,
+             author: `${req.user.firstName} ${req.user.lastName}`,
               author_id:req.user._id };
         const blog = await blogMOdel.create(blogDetails);
         return res.status(201).json({
@@ -44,6 +44,26 @@ exports.updateBlog = async (req,res,next) => {
 };
 
 exports.getAllBlogs = async (req,res,next) => {
+    const page = req.query.page || 1
+    const limit = 20
+    const skip = (page - 1) * limit
+
+// try {
+//     const blog = await blogMOdel.find()
+//     .find(serchQuery)
+//     .sort(sortQuery)
+//     .skip(skip)
+//     .limit(limit)
+
+//     if (!blog) return next(new Error("blog requested not found!"))
+
+//     return res.status(200).json({
+//         status: "sucess",
+//         data: blog
+//     })
+// }catch (error) {
+//     return next(error)
+// }
     try {
         const filter = {"state": "published"}
         const blog = await blogMOdel.find(filter);

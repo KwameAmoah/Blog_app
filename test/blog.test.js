@@ -41,7 +41,7 @@ Test("create blog", async ()=> {
     };
     const res = await supertest(app).post("/blog").set("Authorization", `bearer #{TEST_TOKEN}`).send(blogData);
     blogId =res.body.data.blog_id
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe("success");
     
 });

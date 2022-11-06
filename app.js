@@ -1,7 +1,10 @@
 const express = require("express");
-const passport = require("passport")
+const passport = require("passport");
+const { db } = require("./Models/userModel");
 const authRouter = require("./Routes/authRoutes")
-const blogRouter = require("./Routes/blogRoutes")
+const blogRouter = require("./Routes/blogRoutes");
+
+
 
 
 const app = express();
@@ -16,7 +19,7 @@ app.use("/blogs", blogRouter)
 
 
 app.get("/", async (req, res, next) => {
-    return res.status(200).send("Welcome to our app!");
+    return res.status(200).send("Welcome to the blogverse!");
   });
   
   app.get(
@@ -44,14 +47,14 @@ app.get("/", async (req, res, next) => {
   });
   
   app.post("/signin", async (req, res, next) => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username: username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email  });
     if (!user) {
-      return next(new Error("User does not exist"));
+      return next(new Error("cant be found in the blogverse, sorry!"));
     }
-    const isCorrectPassword = await user.isPasswordCorrect(password);
+    const isCorrectPassword = await User.isCorrectPassword({password});
     if (!isCorrectPassword) {
-      return next(new Error("Incorrect Password"));
+      return next(new Error("wrong key, the lock remains."));
     }
     user.password = undefined; // removing the password from the user doc before signing into the JWT (this won't reflect in the db, cause it will not be saved.)
     const payload = { user: user };
