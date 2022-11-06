@@ -14,8 +14,10 @@ require("./middlewares/passport");
 app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
+
 app.use("/auth", authRouter)
 app.use("/blogs", blogRouter)
+
 
 
 app.get("/", async (req, res, next) => {

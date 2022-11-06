@@ -51,7 +51,7 @@ Test("Patch blog", async ()=> {
         state: "published"
     };
     const res = await supertest(app)
-    .patch(`/blog/${blogId}`).set("Authorization", `bearer #{TEST_TOKEN}`)
+    .patch(`/blogs/${blogId}`).set("Authorization", `bearer #{TEST_TOKEN}`)
     .send(blogData);
 
     expect(res.statusCode).toBe(200);
@@ -59,20 +59,20 @@ Test("Patch blog", async ()=> {
 });
 
 Test("get all blogs", async ()=> {
-    const res = await supertest(app).get(`/blog/`);
+    const res = await supertest(app).get(`/blogs/`);
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBe("success");   
 });
 
 Test("get blog", async ()=> {
-    const res = await supertest(app).get(`/blog/`);
+    const res = await supertest(app).get(`/blogs/`);
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBe("success");   
 });
 
 Test("delete blog", async ()=> {
     const res = await supertest(app)
-    .delete(`/blog/${blogId}`)
+    .delete(`/blogs/${blogId}`)
     .set("Authorization", `bearer ${TEST_TOKEN}`)
     expect(res.statusCode).toBe(204);
     expect(res.body).toEqual({});   
