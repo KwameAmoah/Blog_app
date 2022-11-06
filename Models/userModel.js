@@ -4,43 +4,60 @@ const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    firstname: {
-        type: "string",
+    firstName: {
+        type: String,
         trim: true,
         required: [true, "what do we call you"],
     },
-    lastname: {
-        type: "string",
+    lastName: {
+        type: String,
         trim: true,
-        required: [true, "you belong to what family"],
+        required: [true, "you belong to what family?"],
     },
     email: {
-        type: 'string',
+        type: String,
         trim: true,
         unique: true,
-        required: [true, `your email address please`],
+        required: [true, 'your electronic address please'],
     },
     password: {
-        type: 'string',
+        type: String,
         minlength: 6,
         trim: true,
-        required: [true, "you need a password, please enter one"],
+        required: [true, "A safe with no locks?, please mate"],
+    },
+    confirmPassword: {
+        type: String,
+        minlength: 6,
+        trim: true,
+        required: [true, "The first key and this key dont add up mate"],
+    },
+    contact: {
+        type: Number,
+        minlength:10,
+        required: [true, "how do we reach you?"]
     }
 });
 
 userSchema.pre("save", async function (next) {
     const hashedPassword = await bcrypt.hash(this.password, 10);
+    const confirmHashedPassword = await bcrypt.hash(this.confirmPassword, 10);
+
     this.password = hashedPassword;
+    next();
+
+    this.confirmPassword = confirmHashedPassword;
     next();
 });
 
 
-userSchema.method.isCorrectPassword = async function (inputtedPassword) {
+
+userSchema.methods.isCorrectPassword = async function (inputtedPassword) {
     const isCorrectPassword = await bcrypt.compare(
         inputtedPassword,
         this.password
     );
-    return isCorrectPassword
+    return isCorrectPassword;
 };
 
 const User = mongoose.model("user", userSchema)
